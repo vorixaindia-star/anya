@@ -82,6 +82,20 @@ export function useAuth() {
     setUser(null)
   }
 
+  // ✅ Google Sign In
+  const signInWithGoogle = async () => {
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
   return {
     user,
     isLoading,
@@ -89,6 +103,7 @@ export function useAuth() {
     login,
     register,
     logout,
+    signInWithGoogle,   // ✅ Add this
     isAuthenticated: !!user,
   }
 }

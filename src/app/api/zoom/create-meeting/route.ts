@@ -38,11 +38,16 @@ export async function POST(req: NextRequest) {
           join_before_host: true,
           mute_upon_entry: true,
           waiting_room: false,
+          auto_recording: 'cloud',
         },
       }),
     })
 
     const data = await meetingRes.json()
+
+    if (data.code) {
+      throw new Error(data.message)
+    }
 
     return NextResponse.json({
       success: true,
@@ -51,10 +56,10 @@ export async function POST(req: NextRequest) {
       startUrl: data.start_url,
       password: data.password,
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Zoom API error:', error)
     return NextResponse.json(
-      { success: false, error: 'Failed to create meeting' },
+      { success: false, error: error.message || 'Failed to create meeting' },
       { status: 500 }
     )
   }
