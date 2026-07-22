@@ -3,12 +3,15 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { supabase } from '@/lib/supabase/client'
+import { GlassCard } from '@/components/ui/glass-card'
+import { CosmicButton } from '@/components/ui/cosmic-button'
 import { ScheduleLiveClass } from '@/components/live/schedule-live-class'
 import { LiveClassCard } from '@/components/live/live-class-card'
-import { GlassCard } from '@/components/ui/glass-card'
+import { useRouter } from 'next/navigation'
 
 export default function InstructorLivePage() {
   const { user } = useAuth()
+  const router = useRouter()
   const [classes, setClasses] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -43,7 +46,7 @@ export default function InstructorLivePage() {
           {loading ? (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <GlassCard key={i} padding="sm" className="h-24 shimmer">
+                <GlassCard key={i} padding="sm" className="h-20 shimmer">
                   <div className="h-full w-full shimmer" />
                 </GlassCard>
               ))}
