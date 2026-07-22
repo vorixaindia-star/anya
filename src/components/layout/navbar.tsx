@@ -1,20 +1,16 @@
 'use client'
 
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
-import { CosmicButton } from '@/components/ui/cosmic-button'
+import { Button } from '@/components/ui/button'
 import { ThemeToggle } from './theme-toggle'
-import { Sparkles, Menu, X } from 'lucide-react'
+import { Sparkles, Menu, X, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import { motion } from 'framer-motion'
-
-const navLinks = [
-  { href: '/courses', label: 'Courses' },
-  { href: '/consultation', label: 'Consultation' },
-  { href: '/about', label: 'About' },
-]
 
 export function Navbar() {
+  const router = useRouter()
   const { user, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -25,71 +21,116 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled ? 'glass border-b border-white/5' : 'bg-transparent'
-      )}
-    >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 max-w-6xl">
-        <a href="/" className="flex items-center gap-2.5 text-xl font-bold">
-          <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }}>
-            <Sparkles className="h-6 w-6 text-purple-400" />
-          </motion.div>
-          <span className="gradient-text">Anya</span>
-        </a>
+  const handleLogout = async () => {
+    await logout()
+    router.push('/login')
+  }
 
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {link.label}
-            </a>
-          ))}
+  return (
+    <nav className={cn(
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+      scrolled ? 'glass border-b border-white/5' : 'bg-transparent'
+    )}>
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 max-w-6xl">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 text-xl font-bold">
+          <Sparkles className="h-5 w-5 text-purple-400" />
+          <span className="gradient-text">Anya</span>
+        </Link>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-6">
+          <Link href="/courses" className="text-sm text-muted-foreground hover:text-foreground transition">
+            Courses
+          </Link>
+          <Link href="/consultation" className="text-sm text-muted-foreground hover:text-foreground transition">
+            Consultation
+          </Link>
+          <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition">
+            About
+          </Link>
+
           <ThemeToggle />
+
           {user ? (
-            <div className="flex items-center gap-3">
-              <CosmicButton variant="ghost" size="sm"><a href="/student">Dashboard</a></CosmicButton>
-              <CosmicButton variant="outline" size="sm" onClick={logout}>Logout</CosmicButton>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => router.push('/student')}>
+                Dashboard
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleLogout}
+                className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+              >
+                <LogOut className="h-4 w-4 mr-1" />
+                Logout
+              </Button>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <CosmicButton variant="ghost" size="sm"><a href="/login">Login</a></CosmicButton>
-              <CosmicButton size="sm" glow><a href="/signup">Get Started</a></CosmicButton>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" onClick={() => router.push('/login')}>
+                Login
+              </Button>
+              <Button size="sm" className="gradient-primary text-white" onClick={() => router.push('/signup')}>
+                Sign Up
+              </Button>
             </div>
           )}
         </div>
 
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 rounded-full hover:bg-white/5">
+        {/* Mobile Menu Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        </Button>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="glass border-t border-white/5 md:hidden">
+        <div className="glass border-t border-white/5 md:hidden">
           <div className="flex flex-col p-4 space-y-3">
-            {navLinks.map((link) => (
-              <a key={link.href} href={link.href} className="px-4 py-2.5 text-sm rounded-lg hover:bg-white/5" onClick={() => setIsOpen(false)}>
-                {link.label}
-              </a>
-            ))}
+            <Link href="/courses" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+              Courses
+            </Link>
+            <Link href="/consultation" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+              Consultation
+            </Link>
+            <Link href="/about" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+              About
+            </Link>
+
             {user ? (
               <>
-                <a href="/student" className="px-4 py-2.5 text-sm rounded-lg hover:bg-white/5" onClick={() => setIsOpen(false)}>Dashboard</a>
-                <CosmicButton variant="outline" fullWidth onClick={logout}>Logout</CosmicButton>
+                <Link href="/student" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+                  Dashboard
+                </Link>
+                <Button 
+                  variant="outline" 
+                  onClick={() => { handleLogout(); setIsOpen(false); }}
+                  className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                >
+                  <LogOut className="h-4 w-4 mr-1" />
+                  Logout
+                </Button>
               </>
             ) : (
               <>
-                <a href="/login" className="px-4 py-2.5 text-sm rounded-lg hover:bg-white/5" onClick={() => setIsOpen(false)}>Login</a>
-                <CosmicButton fullWidth glow><a href="/signup" onClick={() => setIsOpen(false)}>Sign Up</a></CosmicButton>
+                <Link href="/login" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+                  Login
+                </Link>
+                <Button className="w-full gradient-primary text-white" onClick={() => { router.push('/signup'); setIsOpen(false); }}>
+                  Sign Up
+                </Button>
               </>
             )}
           </div>
-        </motion.div>
+        </div>
       )}
-    </motion.nav>
+    </nav>
   )
 }

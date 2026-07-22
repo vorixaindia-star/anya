@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { CosmicButton } from '@/components/ui/cosmic-button'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -42,21 +43,38 @@ export function RegisterForm() {
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { full_name: '', email: '', password: '', role: 'student' },
+    defaultValues: {
+      full_name: '',
+      email: '',
+      password: '',
+      role: 'student',
+    },
   })
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
       setLoading(true)
-      const success = await register(data.email, data.password, data.full_name, data.role)
+      const success = await register(
+        data.email,
+        data.password,
+        data.full_name,
+        data.role
+      )
       if (success) {
         toast.success('Account created! 🎉')
-        router.push('/student')
+        // Redirect based on role
+        if (data.role === 'instructor') {
+          router.push('/instructor')
+        } else if (data.role === 'expert') {
+          router.push('/consultation')
+        } else {
+          router.push('/student')
+        }
       } else {
-        toast.error('Failed to create account.')
+        toast.error('Failed to create account. Please try again.')
       }
     } catch (error) {
-      toast.error('Something went wrong.')
+      toast.error('Something went wrong. Please try again later.')
     } finally {
       setLoading(false)
     }
@@ -74,7 +92,13 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input className="pl-10 bg-white/5 border-white/10" placeholder="John Doe" {...field} />
+                  <Input
+                    className="pl-10 bg-white/5 border-white/10"
+                    placeholder="John Doe"
+                    autoComplete="name"
+                    disabled={loading}
+                    {...field}
+                  />
                 </div>
               </FormControl>
               <FormMessage />
@@ -91,7 +115,14 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input className="pl-10 bg-white/5 border-white/10" placeholder="you@example.com" type="email" {...field} />
+                  <Input
+                    className="pl-10 bg-white/5 border-white/10"
+                    placeholder="you@example.com"
+                    type="email"
+                    autoComplete="email"
+                    disabled={loading}
+                    {...field}
+                  />
                 </div>
               </FormControl>
               <FormMessage />
@@ -108,7 +139,14 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input className="pl-10 bg-white/5 border-white/10" type="password" placeholder="••••••••" {...field} />
+                  <Input
+                    className="pl-10 bg-white/5 border-white/10"
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    disabled={loading}
+                    {...field}
+                  />
                 </div>
               </FormControl>
               <FormMessage />
@@ -125,7 +163,11 @@ export function RegisterForm() {
               <FormControl>
                 <div className="relative">
                   <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={loading}
+                  >
                     <SelectTrigger className="pl-10 bg-white/5 border-white/10">
                       <SelectValue placeholder="Select your role" />
                     </SelectTrigger>
@@ -143,12 +185,22 @@ export function RegisterForm() {
         />
 
         <div className="text-center text-sm text-muted-foreground">
-          Already have an account? <a href="/login" className="text-primary hover:underline">Sign in</a>
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary hover:underline transition-colors">
+            Sign in
+          </Link>
         </div>
 
-        <CosmicButton type="submit" size="lg" glow fullWidth disabled={loading}>
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Account'}
-        </CosmicButton>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Creating account...
+            </>
+          ) : (
+            'Create Account'
+          )}
+        </Button>
       </form>
     </Form>
   )
