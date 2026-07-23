@@ -281,15 +281,15 @@ export default function CourseDetailPage() {
                   </CosmicButton>
                 ) : (
                   <RazorpayButton
-                    amount={course.price}
-                    courseId={course.id}
-                    courseName={course.title}
-                    onSuccess={() => {
-                      setEnrolled(true)
-                      toast.success('Enrolled successfully!')
-                    }}
-                    label={`Enroll Now - ₹${course.price}`}
-                  />
+                  amount={course.price}
+                  itemId={course.id}
+                  itemName={course.title}
+                  type="course"
+                  onSuccess={() => {
+                    setEnrolled(true)
+                  }}
+                  label={`Enroll Now - ₹${course.price}`}
+                />
                 )}
 
                 {/* Includes */}

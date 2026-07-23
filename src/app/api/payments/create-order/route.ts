@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Razorpay from 'razorpay'
+import Razorpay from 'razorpay'   // ✅ YAHAN IMPORT KARO
 
-// Lazy load Razorpay — sirf API call par instantiate hoga
+// Lazy load Razorpay instance
 let razorpayInstance: any = null
 
 function getRazorpay() {
@@ -10,7 +10,7 @@ function getRazorpay() {
     const keySecret = process.env.RAZORPAY_KEY_SECRET
 
     if (!keyId || !keySecret) {
-      throw new Error('Razorpay keys are missing. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in environment variables.')
+      throw new Error('Razorpay keys are missing')
     }
 
     razorpayInstance = new Razorpay({
@@ -23,15 +23,23 @@ function getRazorpay() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { amount, currency = 'INR', receipt } = await req.json()
+    const { amount, currency = 'INR', receipt, metadata = {} } = await req.json()
+
+    if (!amount || amount <= 0) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid amount' },
+        { status: 400 }
+      )
+    }
 
     const razorpay = getRazorpay()
 
     const options = {
       amount: amount * 100,
       currency,
-      receipt,
+      receipt: receipt || `receipt_${Date.now()}`,
       payment_capture: 1,
+      notes: metadata,
     }
 
     const order = await razorpay.orders.create(options)
@@ -41,9 +49,10 @@ export async function POST(req: NextRequest) {
       orderId: order.id,
       amount: order.amount,
       currency: order.currency,
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
     })
   } catch (error: any) {
-    console.error('Razorpay order creation error:', error)
+    console.error('Razorpay order error:', error)
     return NextResponse.json(
       { success: false, error: error.message || 'Failed to create order' },
       { status: 500 }
