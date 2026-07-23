@@ -37,16 +37,16 @@ const courses = [
 
 // Gurus
 const gurus = [
-  { name: 'Dr. Ananya Sharma', expertise: 'Vastu & Astrology', rating: 4.9, students: 250 },
-  { name: 'Rajesh Kumar', expertise: 'Numerology & Tarot', rating: 4.8, students: 180 },
-  { name: 'Priya Patel', expertise: 'Reiki & Healing', rating: 4.7, students: 210 },
+  { name: 'Mrs.Chitra Kanoje', expertise: 'Vastu & Astrology', rating: 4.9, students: 250 },
+  { name: 'Deepak Kumar', expertise: 'Numerology & Tarot', rating: 4.8, students: 180 },
+  { name: 'Poonam Singh', expertise: 'Reiki & Healing', rating: 4.7, students: 210 },
 ]
 
 // Testimonials
 const testimonials = [
   { name: 'Priya Sharma', role: 'Astrology Seeker', quote: 'The AI assessment revealed my true potential. The personalized roadmap transformed my understanding of Vedic Astrology.' },
   { name: 'Rahul Verma', role: 'Vastu Consultant', quote: 'From complete beginner to professional consultant in 6 months. Anya gave me the tools and confidence to serve my clients.' },
-  { name: 'Ananya Reddy', role: 'Tarot Reader', quote: 'The AI mentor kept me consistent. I now read tarot professionally and have helped over 200 clients.' },
+  { name: 'Murali Reddy', role: 'Tarot Reader', quote: 'The AI mentor kept me consistent. I now read tarot professionally and have helped over 200 clients.' },
 ]
 
 // Features
