@@ -1,0 +1,107 @@
+import { MusicTrack, MusicCategory } from '@/types/music'
+
+export const categories: MusicCategory[] = [
+  { id: 'meditation', name: 'Meditation Music', icon: '🧘', color: 'from-purple-500 to-pink-500' },
+  { id: 'mantra', name: 'Mantras', icon: '📿', color: 'from-orange-500 to-red-500' },
+  { id: 'bhajan', name: 'Bhajans', icon: '🙏', color: 'from-yellow-500 to-amber-500' },
+  { id: 'sleep', name: 'Sleep Music', icon: '😴', color: 'from-blue-500 to-indigo-500' },
+  { id: 'nature', name: 'Nature Sounds', icon: '🌿', color: 'from-green-500 to-emerald-500' },
+  { id: 'relaxation', name: 'Relaxation', icon: '🔥', color: 'from-red-500 to-rose-500' },
+]
+
+export const trendingTracks: MusicTrack[] = [
+  {
+    id: '1',
+    title: 'Om Chanting 108 Times',
+    artist: 'Anya Music',
+    category: 'mantra',
+    duration: '10:30',
+    youtubeId: 'dQw4w9WgXcQ', // Replace with real IDs
+    thumbnail: '/music/om-chanting.jpg',
+    plays: 12500,
+  },
+  {
+    id: '2',
+    title: 'Mahamrityunjaya Mantra',
+    artist: 'Anya Music',
+    category: 'mantra',
+    duration: '8:15',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/mahamrityunjaya.jpg',
+    plays: 9800,
+  },
+  {
+    id: '3',
+    title: 'Deep Sleep Music',
+    artist: 'Anya Music',
+    category: 'sleep',
+    duration: '60:00',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/sleep-music.jpg',
+    plays: 15300,
+  },
+  {
+    id: '4',
+    title: 'Hanuman Chalisa',
+    artist: 'Anya Music',
+    category: 'bhajan',
+    duration: '12:45',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/hanuman-chalisa.jpg',
+    plays: 21000,
+  },
+  {
+    id: '5',
+    title: 'Shiv Tandav Stotram',
+    artist: 'Anya Music',
+    category: 'bhajan',
+    duration: '9:20',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/shiv-tandav.jpg',
+    plays: 7600,
+  },
+  {
+    id: '6',
+    title: 'Krishna Flute Meditation',
+    artist: 'Anya Music',
+    category: 'meditation',
+    duration: '15:00',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/krishna-flute.jpg',
+    plays: 4300,
+  },
+]
+
+export const allTracks: MusicTrack[] = [
+  ...trendingTracks,
+  {
+    id: '7',
+    title: 'Om Namah Shivaya',
+    artist: 'Anya Music',
+    category: 'mantra',
+    duration: '6:00',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/om-namah-shivaya.jpg',
+    plays: 5400,
+  },
+  {
+    id: '8',
+    title: 'Gayatri Mantra',
+    artist: 'Anya Music',
+    category: 'mantra',
+    duration: '4:30',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/gayatri-mantra.jpg',
+    plays: 6700,
+  },
+  {
+    id: '9',
+    title: 'Rain Sounds',
+    artist: 'Anya Music',
+    category: 'nature',
+    duration: '45:00',
+    youtubeId: 'dQw4w9WgXcQ',
+    thumbnail: '/music/rain-sounds.jpg',
+    plays: 8900,
+  },
+]
