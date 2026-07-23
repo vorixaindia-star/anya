@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from './theme-toggle'
-import { Sparkles, Menu, X, Music, Store, Bot, BookOpen, Users, Home } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Sparkles, Menu, X, ChevronDown, Music, Store, Bot, Users, BookOpen, Home } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -26,14 +32,20 @@ export function Navbar() {
     router.push('/login')
   }
 
-  const navItems = [
-    { href: '/', label: 'Home', icon: Home },
-    { href: '/courses', label: 'Courses', icon: BookOpen },
-    { href: '/store', label: 'Store', icon: Store },
-    { href: '/music', label: 'Music', icon: Music },
-    { href: '/ai-guruji', label: 'AI Guruji', icon: Bot },
-    { href: '/consultation', label: 'Consultation', icon: Users },
-    { href: '/about', label: 'About', icon: Users }, // fallback icon
+  // Main nav items
+  const mainNavItems = [
+    { href: '/', label: 'Home' },
+    { href: '/courses', label: 'Courses' },
+    { href: '/consultation', label: 'Consultation' },
+    { href: '/about', label: 'About' },
+  ]
+
+  // Dropdown items
+  const dropdownItems = [
+    { href: '/music', label: '🎵 Music Hub', icon: Music },
+    { href: '/store', label: '🛍️ Store', icon: Store },
+    { href: '/ai-guruji', label: '🤖 AI Guruji', icon: Bot },
+    { href: '/student', label: '📊 Dashboard', icon: Users },
   ]
 
   return (
@@ -50,7 +62,7 @@ export function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
+          {mainNavItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -59,6 +71,25 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
+
+          {/* Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition">
+                More <ChevronDown className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="glass border-white/10">
+              {dropdownItems.map((item) => (
+                <DropdownMenuItem key={item.href} asChild>
+                  <Link href={item.href} className="flex items-center gap-2 cursor-pointer">
+                    {item.icon && <item.icon className="h-4 w-4" />}
+                    {item.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <ThemeToggle />
 
@@ -103,7 +134,7 @@ export function Navbar() {
       {isOpen && (
         <div className="glass border-t border-white/5 md:hidden">
           <div className="flex flex-col p-4 space-y-3">
-            {navItems.map((item) => (
+            {mainNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -113,7 +144,16 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-
+            {dropdownItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition"
+                onClick={() => setIsOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
             {user ? (
               <>
                 <Link
