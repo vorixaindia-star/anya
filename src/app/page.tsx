@@ -4,48 +4,59 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { CosmicButton } from '@/components/ui/cosmic-button'
 import { GlassCard } from '@/components/ui/glass-card'
 import { ParticleBackground } from '@/components/ui/particle-background'
+import { MusicPlayer } from '@/components/ui/music-player'
+import { Infinity as InfinityIcon } from 'lucide-react'
+
 import {
   ArrowRight, Sparkles, Users, BookOpen, Star, Clock,
   Phone, Mail, MapPin, ChevronRight, CheckCircle,
-  MessageCircle, Crown, Compass, Moon, Eye,
-  Shield, TrendingUp, Calendar, Bot, Target, GraduationCap,
-  Zap, Rocket,  Gem, Feather, Lightbulb,
-  Layers, Globe, Award, BarChart, Activity, Play, Medal, Trophy
+  MessageCircle, Crown, Compass, Moon, Eye, Shield,
+  TrendingUp, Calendar, Bot, Target, GraduationCap,
+  Zap, Rocket, Infinity, Gem, Feather, Lightbulb,
+  ShoppingBag, Award, Video, MessageSquare, Store,
+  Brain, UserPlus, UserCheck, BarChart, Activity, Play,
+  Globe, Layers, Gift, Medal, Trophy, Heart, Sun, Cloud
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRef } from 'react'
-import AIAssessmentSection from "@/components/sections/AIAssessmentSection";
 
-// Data
+// Stats
 const stats = [
   { value: '500+', label: 'Verified Gurus', icon: Shield, desc: 'Expert teachers' },
-  { value: '10K+', label: 'Active Learners', icon: Users, desc: 'Growing daily' },
+  { value: '10K+', label: 'Active Seekers', icon: Users, desc: 'Growing daily' },
   { value: '200+', label: 'Live Classes', icon: Calendar, desc: 'Weekly sessions' },
-  { value: '98%', label: 'Success Rate', icon: TrendingUp, desc: 'Student satisfaction' },
+  { value: '98%', label: 'Success Rate', icon: TrendingUp, desc: 'Transformation rate' },
 ]
 
+// Courses
 const courses = [
   { title: 'Vastu for Beginners', desc: 'Master the ancient science of architecture and harmony', level: 'Beginner', students: 1250, rating: 4.8, price: 999, icon: Compass },
   { title: 'Advanced Astrology', desc: 'Deep dive into planetary positions and birth charts', level: 'Advanced', students: 850, rating: 4.9, price: 2499, icon: Moon },
   { title: 'Tarot Masterclass', desc: 'Learn to read tarot cards with confidence', level: 'Intermediate', students: 620, rating: 4.7, price: 1499, icon: Eye },
 ]
 
+// Gurus
 const gurus = [
   { name: 'Dr. Ananya Sharma', expertise: 'Vastu & Astrology', rating: 4.9, students: 250 },
   { name: 'Rajesh Kumar', expertise: 'Numerology & Tarot', rating: 4.8, students: 180 },
   { name: 'Priya Patel', expertise: 'Reiki & Healing', rating: 4.7, students: 210 },
 ]
 
+// Testimonials
 const testimonials = [
   { name: 'Priya Sharma', role: 'Astrology Seeker', quote: 'The AI assessment revealed my true potential. The personalized roadmap transformed my understanding of Vedic Astrology.' },
   { name: 'Rahul Verma', role: 'Vastu Consultant', quote: 'From complete beginner to professional consultant in 6 months. Anya gave me the tools and confidence to serve my clients.' },
   { name: 'Ananya Reddy', role: 'Tarot Reader', quote: 'The AI mentor kept me consistent. I now read tarot professionally and have helped over 200 clients.' },
 ]
 
-const aiFeatures = [
-  { icon: Target, title: 'Personalized Path', desc: 'AI recommends best courses for you' },
-  { icon: Calendar, title: 'Daily Practice', desc: 'Reminders and progress tracking' },
-  { icon: Users, title: 'Guru Matching', desc: 'Find the perfect mentor for you' },
+// Features
+const features = [
+  { icon: Bot, title: 'AI Guruji', desc: 'Free consultation + detailed paid reports', link: '/ai-guruji', color: 'from-purple-500 to-pink-500' },
+  { icon: BookOpen, title: 'Courses', desc: 'Learn from verified gurus', link: '/courses', color: 'from-blue-500 to-cyan-500' },
+  { icon: Users, title: 'Consultation', desc: '1-on-1 with experts', link: '/consultation', color: 'from-emerald-500 to-teal-500' },
+  { icon: ShoppingBag, title: 'Store', desc: 'Crystals, Rudraksha & more', link: '/store', color: 'from-amber-500 to-orange-500' },
+  { icon: Video, title: 'Live Classes', desc: 'Interactive sessions', link: '/student/live', color: 'from-red-500 to-pink-500' },
+  { icon: Award, title: 'Certificates', desc: 'Earn & download', link: '/student/certificates', color: 'from-yellow-500 to-amber-500' },
 ]
 
 export default function HomePage() {
@@ -58,13 +69,14 @@ export default function HomePage() {
   return (
     <>
       <ParticleBackground />
+      <MusicPlayer />
 
       {/* WhatsApp Float */}
       <a
         href="https://wa.me/9198906002105"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-3 text-white shadow-2xl shadow-green-500/30 transition-all hover:scale-105 hover:from-green-600 hover:to-emerald-600"
+        className="fixed bottom-20 right-6 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-3 text-white shadow-2xl shadow-green-500/30 transition-all hover:scale-105 hover:from-green-600 hover:to-emerald-600"
       >
         <MessageCircle className="h-5 w-5" />
         <span className="hidden text-sm font-medium sm:inline">Chat with us</span>
@@ -83,8 +95,6 @@ export default function HomePage() {
           <div className="absolute left-10 top-20 h-80 w-80 rounded-full bg-purple-500/30 blur-3xl animate-float" />
           <div className="absolute bottom-20 right-10 h-96 w-96 rounded-full bg-pink-500/30 blur-3xl animate-float-reverse" />
           <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-3xl animate-pulse-glow" />
-          <div className="absolute left-1/4 top-1/3 h-40 w-40 rounded-full bg-purple-400/10 blur-2xl animate-orbit" />
-          <div className="absolute right-1/4 bottom-1/3 h-32 w-32 rounded-full bg-pink-400/10 blur-2xl animate-orbit-reverse" />
         </motion.div>
 
         <div className="container relative z-10 mx-auto max-w-6xl">
@@ -115,12 +125,10 @@ export default function HomePage() {
               <span className="gradient-text relative">
                 with Verified Gurus
                 <motion.span
-                  className="absolute -inset-1 -z-10 blur-2xl bg-purple-500/30"
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ duration: 3,
-                     repeat: Infinity,
-                     repeatType: "loop", }}
-                />
+  className="absolute -inset-1 -z-10 blur-2xl bg-purple-500/30"
+  animate={{ scale: [1, 1.3, 1] }}
+  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, repeatType: "loop" }}
+/>
               </span>
             </motion.h1>
 
@@ -152,8 +160,6 @@ export default function HomePage() {
               </Link>
             </motion.div>
 
-            <AIAssessmentSection />
-
             {/* AI Preview Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -170,7 +176,9 @@ export default function HomePage() {
                     <p className="text-sm font-medium">✨ Ask Anya AI</p>
                     <p className="text-xs text-muted-foreground">Personalized guidance based on your birth details and goals</p>
                   </div>
-                  <CosmicButton size="sm" glow variant="outline">Try Now</CosmicButton>
+                  <Link href="/ai-guruji">
+                    <CosmicButton size="sm" glow variant="outline">Try Now</CosmicButton>
+                  </Link>
                 </div>
               </GlassCard>
             </motion.div>
@@ -183,15 +191,55 @@ export default function HomePage() {
               className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground"
             >
               <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-emerald-400" /> 500+ Verified Gurus</span>
-              <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-emerald-400" /> 10K+ Active Learners</span>
+              <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-emerald-400" /> 10K+ Active Seekers</span>
               <span className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-emerald-400" /> 200+ Live Classes</span>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ========== STATS ========== */}
+      {/* ========== FEATURES GRID ========== */}
       <section className="border-y border-white/5 bg-muted/20 px-4 py-16">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mb-12 text-center"
+          >
+            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+              Everything You Need in <span className="gradient-text">One Place</span>
+            </h2>
+            <p className="text-muted-foreground">Learn, consult, shop, and grow — all on Anya</p>
+          </motion.div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                viewport={{ once: true }}
+              >
+                <Link href={feature.link}>
+                  <GlassCard hover padding="md" className="cursor-pointer h-full">
+                    <div className={`inline-flex rounded-lg bg-gradient-to-br ${feature.color} p-2.5`}>
+                      <feature.icon className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="mt-3 font-semibold">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                  </GlassCard>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========== STATS ========== */}
+      <section className="px-4 py-16">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat, i) => (
@@ -216,7 +264,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== LEARNING PATHS ========== */}
-      <section className="px-4 py-20">
+      <section className="bg-muted/20 px-4 py-20">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -259,7 +307,7 @@ export default function HomePage() {
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="gradient-text text-lg font-bold">₹{course.price}</span>
-                      <Link href="/courses">
+                      <Link href={`/courses`}>
                         <CosmicButton size="sm" glow>Enroll</CosmicButton>
                       </Link>
                     </div>
@@ -286,7 +334,7 @@ export default function HomePage() {
       </section>
 
       {/* ========== GURU MARKETPLACE ========== */}
-      <section className="bg-muted/20 px-4 py-20">
+      <section className="px-4 py-20">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -373,7 +421,11 @@ export default function HomePage() {
               Get personalized course recommendations, daily practice reminders, and guru matching based on your birth details and goals.
             </p>
             <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-              {aiFeatures.map((feature, i) => (
+              {[
+                { icon: Target, title: 'Personalized Path', desc: 'AI recommends best courses for you' },
+                { icon: Calendar, title: 'Daily Practice', desc: 'Reminders and progress tracking' },
+                { icon: Users, title: 'Guru Matching', desc: 'Find the perfect mentor for you' },
+              ].map((feature, i) => (
                 <GlassCard key={i} padding="sm" hover>
                   <div className="flex flex-col items-center text-center">
                     <feature.icon className="mb-2 h-8 w-8 text-purple-400" />
@@ -383,7 +435,7 @@ export default function HomePage() {
                 </GlassCard>
               ))}
             </div>
-            <Link href="/signup">
+            <Link href="/ai-guruji">
               <CosmicButton size="lg" glow icon={<ArrowRight className="h-5 w-5" />}>
                 Try Anya AI Today
               </CosmicButton>
@@ -494,7 +546,7 @@ export default function HomePage() {
               </Link>
               <Link href="/courses">
                 <CosmicButton size="lg" variant="outline">
-                  Explore Knowledge
+                  Explore Wisdom
                 </CosmicButton>
               </Link>
             </div>
@@ -518,8 +570,9 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/courses" className="text-muted-foreground transition-colors hover:text-foreground">Courses</Link></li>
                 <li><Link href="/consultation" className="text-muted-foreground transition-colors hover:text-foreground">Consultation</Link></li>
+                <li><Link href="/store" className="text-muted-foreground transition-colors hover:text-foreground">Store</Link></li>
+                <li><Link href="/ai-guruji" className="text-muted-foreground transition-colors hover:text-foreground">AI Guruji</Link></li>
                 <li><Link href="/about" className="text-muted-foreground transition-colors hover:text-foreground">About Us</Link></li>
-                <li><Link href="/blog" className="text-muted-foreground transition-colors hover:text-foreground">Blog</Link></li>
               </ul>
             </div>
             <div>
