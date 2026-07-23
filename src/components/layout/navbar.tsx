@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from './theme-toggle'
-import { Sparkles, Menu, X, LogOut } from 'lucide-react'
+import { Sparkles, Menu, X, Music, Store, Bot, BookOpen, Users, Home } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -26,6 +26,16 @@ export function Navbar() {
     router.push('/login')
   }
 
+  const navItems = [
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/courses', label: 'Courses', icon: BookOpen },
+    { href: '/store', label: 'Store', icon: Store },
+    { href: '/music', label: 'Music', icon: Music },
+    { href: '/ai-guruji', label: 'AI Guruji', icon: Bot },
+    { href: '/consultation', label: 'Consultation', icon: Users },
+    { href: '/about', label: 'About', icon: Users }, // fallback icon
+  ]
+
   return (
     <nav className={cn(
       'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
@@ -40,15 +50,15 @@ export function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/courses" className="text-sm text-muted-foreground hover:text-foreground transition">
-            Courses
-          </Link>
-          <Link href="/consultation" className="text-sm text-muted-foreground hover:text-foreground transition">
-            Consultation
-          </Link>
-          <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition">
-            About
-          </Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm text-muted-foreground hover:text-foreground transition"
+            >
+              {item.label}
+            </Link>
+          ))}
 
           <ThemeToggle />
 
@@ -57,13 +67,12 @@ export function Navbar() {
               <Button variant="ghost" size="sm" onClick={() => router.push('/student')}>
                 Dashboard
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleLogout}
                 className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
               >
-                <LogOut className="h-4 w-4 mr-1" />
                 Logout
               </Button>
             </div>
@@ -94,36 +103,47 @@ export function Navbar() {
       {isOpen && (
         <div className="glass border-t border-white/5 md:hidden">
           <div className="flex flex-col p-4 space-y-3">
-            <Link href="/courses" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
-              Courses
-            </Link>
-            <Link href="/consultation" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
-              Consultation
-            </Link>
-            <Link href="/about" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
-              About
-            </Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition"
+                onClick={() => setIsOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
 
             {user ? (
               <>
-                <Link href="/student" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+                <Link
+                  href="/student"
+                  className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition"
+                  onClick={() => setIsOpen(false)}
+                >
                   Dashboard
                 </Link>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => { handleLogout(); setIsOpen(false); }}
                   className="border-red-500/30 text-red-400 hover:bg-red-500/10"
                 >
-                  <LogOut className="h-4 w-4 mr-1" />
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <Link href="/login" className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition" onClick={() => setIsOpen(false)}>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-sm hover:bg-white/5 rounded-lg transition"
+                  onClick={() => setIsOpen(false)}
+                >
                   Login
                 </Link>
-                <Button className="w-full gradient-primary text-white" onClick={() => { router.push('/signup'); setIsOpen(false); }}>
+                <Button
+                  className="w-full gradient-primary text-white"
+                  onClick={() => { router.push('/signup'); setIsOpen(false); }}
+                >
                   Sign Up
                 </Button>
               </>

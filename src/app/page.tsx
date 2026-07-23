@@ -69,7 +69,7 @@ export default function HomePage() {
   return (
     <>
       <ParticleBackground />
-      <MusicPlayer />
+      
 
       {/* WhatsApp Float */}
       <a
