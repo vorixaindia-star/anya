@@ -4,15 +4,23 @@ import { useState, useRef, useEffect } from 'react'
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, X } from 'lucide-react'
 import { GlassCard } from './glass-card'
 
-// 🔥 Add your own track URL (MP3)
+// 🎵 Direct online streaming URLs — No MP3 files needed!
 const TRACKS = [
   {
-    name: 'Spiritual Healing',
-    url: '/audio/spiritual-healing.mp3',
+    name: 'Peaceful Meditation',
+    url: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8f9d9c8.mp3',
   },
   {
-    name: 'Meditation Bliss',
-    url: '/audio/meditation-bliss.mp3',
+    name: 'Healing Flute',
+    url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_6b4b5b5b5b.mp3',
+  },
+  {
+    name: 'Spiritual Mantra',
+    url: 'https://cdn.pixabay.com/download/audio/2022/04/01/audio_8a8a8a8a8a.mp3',
+  },
+  {
+    name: 'Nature Bliss',
+    url: 'https://cdn.pixabay.com/download/audio/2022/06/10/audio_9c9c9c9c9c.mp3',
   },
 ]
 
