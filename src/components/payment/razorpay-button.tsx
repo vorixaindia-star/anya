@@ -17,7 +17,7 @@ interface RazorpayButtonProps {
   amount: number
   itemId: string
   itemName: string
-  type: 'course' | 'consultation'
+  type: 'course' | 'consultation' | 'product'
   onSuccess?: () => void
   label?: string
 }
@@ -96,7 +96,12 @@ export function RazorpayButton({
         amount: orderAmount,
         currency,
         name: 'Anya Academy',
-        description: type === 'course' ? `Enrollment: ${itemName}` : `Consultation: ${itemName}`,
+        description:
+  type === 'course'
+    ? `Enrollment: ${itemName}`
+    : type === 'consultation'
+    ? `Consultation: ${itemName}`
+    : `Purchase: ${itemName}`,
         order_id: orderId,
         handler: async (response: any) => {
           const verifyRes = await fetch('/api/payments/verify', {
@@ -108,6 +113,7 @@ export function RazorpayButton({
               signature: response.razorpay_signature,
               amount,
               courseId: type === 'course' ? itemId : undefined,
+              productId: type === 'product' ? itemId : undefined,
               studentId: user.id,
               type,
             }),

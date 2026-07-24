@@ -71,3 +71,29 @@ export interface ApiResponse<T = any> {
   error?: string
   message?: string
 }
+
+export interface Product {
+  id: string
+  name: string
+  slug: string
+  description: string
+  price: number
+  compare_price?: number
+  images: string[]
+  category: string
+  stock: number
+  rating: number
+  total_reviews: number
+  vendor_id?: string
+  vendor?: { business_name: string }
+  is_active: boolean
+  created_at: string
+}
+
+export interface CartItem {
+  id: string
+  user_id: string
+  product_id: string
+  quantity: number
+  product?: Product
+}

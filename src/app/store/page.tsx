@@ -1,37 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/hooks/use-auth'
 import { GlassCard } from '@/components/ui/glass-card'
 import { CosmicButton } from '@/components/ui/cosmic-button'
 import { Input } from '@/components/ui/input'
 import { 
   Search, ShoppingCart, Heart, Star, Filter,
-  Grid3X3, List, ChevronRight, X
+  Grid3X3, List, ChevronRight, X, Loader2
 } from 'lucide-react'
 import Link from 'next/link'
-import { useAuth } from '@/hooks/use-auth'
 import { toast } from 'sonner'
-
-interface Product {
-  id: string
-  name: string
-  slug: string
-  description: string
-  price: number
-  compare_price: number
-  images: string[]
-  category: string
-  stock: number
-  rating: number
-  total_reviews: number
-  vendor: {
-    business_name: string
-  }
-}
+import { Product } from '@/types'
 
 export default function StorePage() {
   const { user } = useAuth()
+  const router = useRouter()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -89,6 +75,29 @@ export default function StorePage() {
       return
     }
 
+    // Check if already in cart
+    const { data: existing } = await supabase
+      .from('cart_items')
+      .select('id, quantity')
+      .eq('user_id', user.id)
+      .eq('product_id', productId)
+      .single()
+
+    if (existing) {
+      // Update quantity
+      const { error } = await supabase
+        .from('cart_items')
+        .update({ quantity: existing.quantity + 1 })
+        .eq('id', existing.id)
+      if (!error) {
+        toast.success('Quantity updated!')
+        setCartCount(prev => prev + 1)
+      } else {
+        toast.error('Failed to update cart')
+      }
+      return
+    }
+
     const { error } = await supabase
       .from('cart_items')
       .insert([{ user_id: user.id, product_id: productId, quantity: 1 }])
@@ -96,7 +105,7 @@ export default function StorePage() {
     if (error) {
       toast.error('Failed to add to cart')
     } else {
-      toast.success('Added to cart!')
+      toast.success('Added to cart! 🛒')
       setCartCount(prev => prev + 1)
     }
   }
@@ -110,18 +119,16 @@ export default function StorePage() {
             <h1 className="text-3xl font-bold tracking-tight">🛍️ Occult Store</h1>
             <p className="text-muted-foreground">Crystals, Rudraksha, Yantras & more</p>
           </div>
-          <div className="flex items-center gap-2">
-            <Link href="/cart" className="relative">
-              <button className="p-2 rounded-lg glass hover:bg-white/5 transition">
-                <ShoppingCart className="h-5 w-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-purple-500 text-xs flex items-center justify-center text-white">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </Link>
-          </div>
+          <Link href="/cart" className="relative">
+            <button className="p-2 rounded-lg glass hover:bg-white/5 transition">
+              <ShoppingCart className="h-5 w-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-purple-500 text-xs flex items-center justify-center text-white">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </Link>
         </div>
 
         {/* Search & Filters */}
@@ -160,8 +167,8 @@ export default function StorePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {[...Array(8)].map((_, i) => (
               <GlassCard key={i} padding="sm" className="h-80 shimmer">
-              <div className="h-full w-full shimmer" />
-            </GlassCard>
+                <div className="h-full w-full shimmer" />
+              </GlassCard>
             ))}
           </div>
         ) : products.length === 0 ? (
@@ -171,19 +178,21 @@ export default function StorePage() {
         ) : (
           <div className={`grid ${view === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'} gap-4`}>
             {products.map((product) => (
-              <GlassCard key={product.id} hover padding="sm">
-                <div className="relative aspect-square rounded-lg overflow-hidden bg-muted/20">
-                  {product.images && product.images[0] ? (
-                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      No Image
-                    </div>
-                  )}
-                  <button className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 hover:bg-black/70">
-                    <Heart className="h-4 w-4 text-white" />
-                  </button>
-                </div>
+              <GlassCard key={product.id} hover padding="sm" className="relative">
+                <Link href={`/store/product/${product.slug}`}>
+                  <div className="aspect-square rounded-lg overflow-hidden bg-muted/20 relative">
+                    {product.images && product.images[0] ? (
+                      <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover hover:scale-105 transition" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-4xl">🔮</div>
+                    )}
+                    {product.stock === 0 && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                        <span className="text-white font-bold">Out of Stock</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
 
                 <div className="mt-3">
                   <Link href={`/store/product/${product.slug}`}>
@@ -209,6 +218,7 @@ export default function StorePage() {
                       glow 
                       onClick={() => addToCart(product.id)}
                       disabled={product.stock === 0}
+                      icon={<ShoppingCart className="h-3 w-3" />}
                     >
                       {product.stock > 0 ? 'Add' : 'Sold'}
                     </CosmicButton>
