@@ -6,14 +6,23 @@ import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, X, Minus, 
 import { GlassCard } from './glass-card'
 
 // ✅ 100% Working URLs (SoundHelix — reliable test audio)
-const TRACKS = [
-  { name: 'Healing Melody', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-  { name: 'Peaceful Harmony', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  { name: 'Spiritual Tone', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-  { name: 'Nature Calm', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-]
+
 
 export function MusicPlayer() {
+
+    const [tracks, setTracks] = useState<
+  { name: string; url: string }[]
+>([]);
+
+useEffect(() => {
+  fetch("/api/audio")
+    .then((res) => res.json())
+    .then((data) => {
+      setTracks(data);
+      setIsLoading(false);
+    });
+}, []);
+
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState(0)
   const [isMuted, setIsMuted] = useState(false)
@@ -47,12 +56,12 @@ export function MusicPlayer() {
   }
 
   const nextTrack = () => {
-    setCurrentTrack((prev) => (prev + 1) % TRACKS.length)
+    setCurrentTrack((prev) => (prev + 1) % tracks.length)
     setIsPlaying(true)
   }
 
   const prevTrack = () => {
-    setCurrentTrack((prev) => (prev - 1 + TRACKS.length) % TRACKS.length)
+    setCurrentTrack((prev) => (prev - 1 + tracks.length) % tracks.length)
     setIsPlaying(true)
   }
 
@@ -98,6 +107,16 @@ export function MusicPlayer() {
 
   const toggleMinimize = () => setIsMinimized(!isMinimized)
 
+  if (tracks.length === 0) {
+    return (
+      <div className="fixed bottom-24 right-6 z-50">
+        <GlassCard className="p-3">
+          Loading music...
+        </GlassCard>
+      </div>
+    );
+  }
+
   if (!isVisible) {
     return (
       <button
@@ -112,8 +131,8 @@ export function MusicPlayer() {
   return (
     <>
       <audio
-        ref={audioRef}
-        src={TRACKS[currentTrack].url}
+  ref={audioRef}
+  src={tracks[currentTrack]?.url ?? ""}
         onTimeUpdate={handleTimeUpdate}
         onEnded={nextTrack}
         onLoadedMetadata={handleLoadedMetadata}
@@ -157,7 +176,7 @@ export function MusicPlayer() {
                   >
                     {isPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                   </button>
-                  <span className="text-xs font-medium truncate">{TRACKS[currentTrack].name}</span>
+                  <span className="text-xs font-medium truncate">{tracks[currentTrack]?.name ?? "Loading..."}</span>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <button
@@ -198,7 +217,7 @@ export function MusicPlayer() {
                 </div>
 
                 <p className="text-sm text-muted-foreground truncate">
-                  {TRACKS[currentTrack].name}
+                {tracks[currentTrack]?.name ?? "Loading..."}
                 </p>
 
                 <div
@@ -247,7 +266,7 @@ export function MusicPlayer() {
                 </div>
 
                 <p className="text-center text-xs text-muted-foreground">
-                  {currentTrack + 1} / {TRACKS.length}
+                  {currentTrack + 1} / {tracks.length}
                 </p>
               </div>
             )}
