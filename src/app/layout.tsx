@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/layout/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { Navbar } from '@/components/layout/navbar'
 import { MusicPlayer } from '@/components/ui/music-player'
+import { ChatbotWidget } from '@/components/chatbot/chatbot-widget'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -46,6 +48,7 @@ export default function RootLayout({
         >
           <Navbar />
           <main className="min-h-screen pt-16">{children}</main>
+          <ChatbotWidget />
           <MusicPlayer />
           <Toaster richColors position="top-center" />
         </ThemeProvider>
