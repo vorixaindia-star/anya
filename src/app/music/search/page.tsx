@@ -5,11 +5,9 @@ import { useSearchParams } from 'next/navigation'
 import { GlassCard } from '@/components/ui/glass-card'
 import { MusicCard } from '@/components/music/music-card'
 import { allTracks } from '@/lib/music-data'
-import { MusicTrack } from '@/types/music'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
 
-// 🔥 Inner component that uses useSearchParams
 function SearchResults() {
   const searchParams = useSearchParams()
   const query = searchParams.get('q') || ''
@@ -45,7 +43,6 @@ function SearchResults() {
   )
 }
 
-// 🔥 Main page component with Suspense boundary
 export default function SearchPage() {
   return (
     <div className="min-h-screen bg-muted/5 pt-16">

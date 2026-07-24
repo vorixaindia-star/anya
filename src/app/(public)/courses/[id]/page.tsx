@@ -276,21 +276,22 @@ export default function CourseDetailPage() {
 
                 {/* Enroll Button */}
                 {enrolled ? (
-                  <CosmicButton glow fullWidth onClick={() => router.push(`/student/courses/${course.id}`)}>
-                    Go to Course
-                  </CosmicButton>
-                ) : (
-                  <RazorpayButton
-                  amount={course.price}
-                  itemId={course.id}
-                  itemName={course.title}
-                  type="course"
-                  onSuccess={() => {
-                    setEnrolled(true)
-                  }}
-                  label={`Enroll Now - ₹${course.price}`}
-                />
-                )}
+  <CosmicButton glow fullWidth onClick={() => router.push(`/student/courses/${course.id}`)}>
+    Go to Course
+  </CosmicButton>
+) : (
+  <RazorpayButton
+    amount={course.price}
+    itemId={course.id}
+    itemName={course.title}
+    type="course"
+    onSuccess={() => {
+      setEnrolled(true)
+      toast.success('Enrolled successfully!')
+    }}
+    label={`Enroll Now - ₹${course.price}`}
+  />
+)}
 
                 {/* Includes */}
                 <div className="space-y-2 text-sm">
